@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "release": "semantic-release"
   },
   "author": "",
   "license": "ISC",
@@ -13,9 +13,41 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^12.0.0",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "semantic-release": "^23.0.8",
     "standard-version": "^9.5.0"
+  },
+  "release": {
+    "branches": [
+      "main",
+      "next"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits",
+          "presetConfig": {
+            "compareUrlFormat": "{{host}}/{{owner}}/{{repository}}/branchCompare?baseVersion=GT{{previousTag}}&targetVersion=GT{{currentTag}}&_a=commits"
+          }
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/exec",
+      [
+        "@semantic-release/git",
+        {
+          "message": "chore(release): {nextRelease.version} [skip ci]\n\\n{nextRelease.notes}"
+        }
+      ]
+    ]
   }
 }
